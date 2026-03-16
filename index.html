@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html>
-<body>
-
-<h2>10 Day Entry</h2>
-
-<input id="d1" placeholder="Day1"><br>
+<!DOCTYPE html><html>
+<body><h2>10 Day Chain Generator</h2><input id="d1" placeholder="Day1"><br>
 <input id="d2" placeholder="Day2"><br>
 <input id="d3" placeholder="Day3"><br>
 <input id="d4" placeholder="Day4"><br>
@@ -15,35 +10,76 @@
 <input id="d9" placeholder="Day9"><br>
 <input id="d10" placeholder="Day10"><br><br>
 
-<button onclick="shiftNumbers()">Push Up</button>
+<button onclick="pushUp()">Push Up</button>
 <button onclick="generate()">Generate</button>
 
-<p id="result"></p>
+<h3 id="result"></h3><script>
 
-<script>
+function pushUp(){
 
-function shiftNumbers(){
-document.getElementById("d1").value = document.getElementById("d2").value
-document.getElementById("d2").value = document.getElementById("d3").value
-document.getElementById("d3").value = document.getElementById("d4").value
-document.getElementById("d4").value = document.getElementById("d5").value
-document.getElementById("d5").value = document.getElementById("d6").value
-document.getElementById("d6").value = document.getElementById("d7").value
-document.getElementById("d7").value = document.getElementById("d8").value
-document.getElementById("d8").value = document.getElementById("d9").value
-document.getElementById("d9").value = document.getElementById("d10").value
-document.getElementById("d10").value = ""
+let v1=d1.value
+let v2=d2.value
+let v3=d3.value
+let v4=d4.value
+let v5=d5.value
+let v6=d6.value
+let v7=d7.value
+let v8=d8.value
+let v9=d9.value
+let v10=d10.value
+
+d1.value=v2
+d2.value=v3
+d3.value=v4
+d4.value=v5
+d5.value=v6
+d6.value=v7
+d7.value=v8
+d8.value=v9
+d9.value=v10
+d10.value=""
+
+}
+
+function last2(x){
+return ("0"+x).slice(-2)
 }
 
 function generate(){
-let n1 = document.getElementById("d1").value
-let n2 = document.getElementById("d2").value
 
-document.getElementById("result").innerHTML =
-"Day1: "+n1+" Day2: "+n2
+let a=parseInt(d1.value)
+let b=parseInt(d2.value)
+
+if(isNaN(a)||isNaN(b)){
+result.innerHTML="Enter Day1 and Day2 numbers"
+return
 }
 
-</script>
+let diff
 
-</body>
+if(a<b){
+diff=(a+10)-b
+}else{
+diff=a-b
+}
+
+let step1=diff
+let step2=100-step1
+let step3=step2+b
+
+let box1=last2(step3)
+let box2=last2(step3+19)
+let box3=last2(step3+38)
+let box4=last2(step3+57)
+
+result.innerHTML=
+"Boxes:<br>"+
+box1+"<br>"+
+box2+"<br>"+
+box3+"<br>"+
+box4
+
+}
+
+</script></body>
 </html>
