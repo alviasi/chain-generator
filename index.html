@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Full Chain Generator with Digit-wise Mapping</title>
+<title>10-Day Chain Generator</title>
 <style>
 body { font-family:Arial; text-align:center; }
 input { width:70px; padding:8px; margin:6px auto; display:block; text-align:center; font-size:16px; }
@@ -11,7 +11,7 @@ button { padding:10px 20px; font-size:16px; margin:10px; cursor:pointer; }
 </head>
 <body>
 
-<h2>10-Day Full Chain Generator (Digit-wise Mapping)</h2>
+<h2>10-Day Full Chain Generator</h2>
 
 <input id="d1" placeholder="Day1">
 <input id="d2" placeholder="Day2">
@@ -42,13 +42,15 @@ function last2(n){ return ("0"+n).slice(-2); }
 
 function generateBoxes(a,b){
     let diff = (a<b)? (a+10)-b : a-b;
-    let step2 = 100 - diff;
-    let base = step2 + b;
-    let boxes = [];
-    for(let i=0;i<4;i++){ boxes.push(last2(base + 19*i)); }
+    let base = 100 - diff + b;
+    let boxes=[];
+    for(let i=0;i<4;i++){
+        boxes.push(last2(base + 19*i));
+    }
     return boxes;
 }
 
+// Digit-wise mapping: 0↔5,1↔6,2↔7,3↔8,4↔9
 function checkBoxMatch(box, dayNum){
     const mapping = {0:5,1:6,2:7,3:8,4:9,5:0,6:1,7:2,8:3,9:4};
     let digits = box.split("");
@@ -60,9 +62,9 @@ function generateChain(){
     let days=[];
     for(let i=1;i<=10;i++){
         let val = document.getElementById("d"+i).value.trim();
-        if(val===""){ alert("Please enter all 10 numbers."); return; }
+        if(val===""){ alert("Please enter all 10 numbers"); return; }
         let num = parseInt(val);
-        if(isNaN(num)){ alert("Please enter valid numbers only."); return; }
+        if(isNaN(num)){ alert("Please enter valid numbers"); return; }
         days.push(num);
     }
 
@@ -75,7 +77,7 @@ function generateChain(){
 
         let foundIndex=-1;
         for(let j=0;j<boxes.length;j++){
-            if(boxes[j]==last2(days[i+2]) || checkBoxMatch(boxes[j], days[i+2])) { foundIndex=j; break; }
+            if(boxes[j]==last2(days[i+2]) || checkBoxMatch(boxes[j],days[i+2])){ foundIndex=j; break; }
         }
 
         sequenceHTML+="<strong>Day"+(i+2)+" in Day"+(i+1)+"-"+(i+2)+" Boxes:</strong> ";
@@ -92,10 +94,11 @@ function generateChain(){
     document.getElementById("day11").innerText = predictedBox;
 }
 
-// Attach button click after DOM loaded
+// Attach button click
 document.getElementById("generateBtn").addEventListener("click", generateChain);
 
 });
 </script>
+
 </body>
 </html>
