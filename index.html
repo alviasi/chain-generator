@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Full Chain Generator</title>
+<title>Full Chain Generator with Digit-wise Mapping</title>
 <style>
 body { font-family:Arial; text-align:center; }
 input { width:70px; padding:8px; margin:6px auto; display:block; text-align:center; font-size:16px; }
@@ -59,9 +59,11 @@ function checkBoxMatch(box, dayNum){
 function generateChain(){
     let days=[];
     for(let i=1;i<=10;i++){
-        let val = parseInt(document.getElementById("d"+i).value);
-        if(isNaN(val)) { alert("Please enter numbers for all 10 days."); return; }
-        days.push(val);
+        let val = document.getElementById("d"+i).value.trim();
+        if(val===""){ alert("Please enter all 10 numbers."); return; }
+        let num = parseInt(val);
+        if(isNaN(num)){ alert("Please enter valid numbers only."); return; }
+        days.push(num);
     }
 
     let allBoxesHTML="", sequenceHTML="", currentIndex=0;
@@ -90,11 +92,10 @@ function generateChain(){
     document.getElementById("day11").innerText = predictedBox;
 }
 
-// Attach click event after DOM load
+// Attach button click after DOM loaded
 document.getElementById("generateBtn").addEventListener("click", generateChain);
 
-}); // end DOMContentLoaded
+});
 </script>
-
 </body>
 </html>
