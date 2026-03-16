@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
 <title>Chain Generator</title>
 
 <style>
@@ -11,21 +13,25 @@ text-align:center;
 }
 
 input{
-width:50px;
-margin:4px;
-padding:5px;
+width:70px;
+padding:8px;
+margin:6px auto;
+display:block;
+text-align:center;
+font-size:16px;
 }
 
 button{
-padding:10px;
+padding:10px 20px;
+font-size:16px;
 margin-top:10px;
 }
 
 .box{
 border:2px solid black;
-width:60px;
-padding:10px;
-margin:10px auto;
+width:70px;
+padding:12px;
+margin:8px auto;
 font-size:20px;
 display:block;
 }
@@ -38,22 +44,16 @@ display:block;
 
 <h2>10 Day Chain Generator</h2>
 
-<div>
-
-<input id="d1" placeholder="D1">
-<input id="d2" placeholder="D2">
-<input id="d3" placeholder="D3">
-<input id="d4" placeholder="D4">
-<input id="d5" placeholder="D5">
-<input id="d6" placeholder="D6">
-<input id="d7" placeholder="D7">
-<input id="d8" placeholder="D8">
-<input id="d9" placeholder="D9">
-<input id="d10" placeholder="D10">
-
-</div>
-
-<br>
+<input id="d1" placeholder="Day1">
+<input id="d2" placeholder="Day2">
+<input id="d3" placeholder="Day3">
+<input id="d4" placeholder="Day4">
+<input id="d5" placeholder="Day5">
+<input id="d6" placeholder="Day6">
+<input id="d7" placeholder="Day7">
+<input id="d8" placeholder="Day8">
+<input id="d9" placeholder="Day9">
+<input id="d10" placeholder="Day10">
 
 <button onclick="generate()">Generate Boxes</button>
 
@@ -101,4 +101,5 @@ document.getElementById("result").innerHTML=
 </script>
 
 </body>
+
 </html>
