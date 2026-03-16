@@ -19,6 +19,7 @@ button{
 padding:10px 20px;
 font-size:16px;
 margin:10px;
+cursor:pointer;
 }
 .box{
 border:2px solid black;
@@ -45,7 +46,7 @@ display:block;
 <input id="d9" placeholder="Day9">
 <input id="d10" placeholder="Day10">
 
-<button onclick="generateChain()">Generate Full Chain</button>
+<button id="generateBtn">Generate Full Chain</button>
 
 <h3>Boxes for each pair</h3>
 <div id="allBoxes"></div>
@@ -58,11 +59,13 @@ display:block;
 
 <script>
 
-// Generate 4 boxes from two numbers
+// Helper: format number to 2 digits
 function last2(n){ return ("0"+n).slice(-2); }
+
+// Generate 4 boxes from two numbers
 function generateBoxes(a,b){
     let diff = (a<b)? (a+10)-b : a-b;
-    let step2 = 100-diff;
+    let step2 = 100 - diff;
     let base = step2 + b;
     let boxes = [];
     for(let i=0;i<4;i++){
@@ -71,19 +74,22 @@ function generateBoxes(a,b){
     return boxes;
 }
 
-// Digit-wise mapping check
+// Digit-wise mapping: 0↔5,1↔6,2↔7,3↔8,4↔9
 function checkBoxMatch(box, dayNum){
     const mapping = {0:5,1:6,2:7,3:8,4:9,5:0,6:1,7:2,8:3,9:4};
     let digits = box.split("");
     let mappedDigits = digits.map(d=>mapping[d]?mapping[d]:d);
-    // Check if any mapped digit matches dayNum
     return mappedDigits.includes(dayNum.toString());
 }
 
-// Generate full chain
+// Generate full chain and track sequence
 function generateChain(){
     let days=[];
-    for(let i=1;i<=10;i++){ days.push(parseInt(document.getElementById("d"+i).value)); }
+    for(let i=1;i<=10;i++){
+        let val = parseInt(document.getElementById("d"+i).value);
+        if(isNaN(val)) { alert("Please enter numbers for all 10 days."); return; }
+        days.push(val);
+    }
 
     let allBoxesHTML="";
     let sequenceHTML="";
@@ -91,9 +97,12 @@ function generateChain(){
 
     for(let i=0;i<days.length-1;i++){
         let boxes = generateBoxes(days[i],days[i+1]);
+
+        // Display boxes
         allBoxesHTML+="<strong>Day"+(i+1)+"-"+(i+2)+" Boxes:</strong><br>";
         boxes.forEach(b=>{ allBoxesHTML+="<div class='box'>"+b+"</div>"; });
 
+        // Sequence tracking
         let foundIndex=-1;
         for(let j=0;j<boxes.length;j++){
             if(boxes[j]==last2(days[i+2]) || checkBoxMatch(boxes[j], days[i+2])){
@@ -115,6 +124,9 @@ function generateChain(){
     let predictedBox = lastBoxes[currentIndex>=0?currentIndex:0];
     document.getElementById("day11").innerText = predictedBox;
 }
+
+// Attach function to button
+document.getElementById("generateBtn").addEventListener("click", generateChain);
 
 </script>
 </body>
