@@ -1,34 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Full Chain Generator with Digit-wise Mapping</title>
+<title>Full Chain Generator</title>
 <style>
-body{
-font-family:Arial;
-text-align:center;
-}
-input{
-width:70px;
-padding:8px;
-margin:6px auto;
-display:block;
-text-align:center;
-font-size:16px;
-}
-button{
-padding:10px 20px;
-font-size:16px;
-margin:10px;
-cursor:pointer;
-}
-.box{
-border:2px solid black;
-width:70px;
-padding:12px;
-margin:8px auto;
-font-size:18px;
-display:block;
-}
+body { font-family:Arial; text-align:center; }
+input { width:70px; padding:8px; margin:6px auto; display:block; text-align:center; font-size:16px; }
+button { padding:10px 20px; font-size:16px; margin:10px; cursor:pointer; }
+.box { border:2px solid black; width:70px; padding:12px; margin:8px auto; font-size:18px; display:block; }
 </style>
 </head>
 <body>
@@ -58,23 +36,19 @@ display:block;
 <div id="day11" class="box"></div>
 
 <script>
+document.addEventListener("DOMContentLoaded", function(){
 
-// Helper: format number to 2 digits
 function last2(n){ return ("0"+n).slice(-2); }
 
-// Generate 4 boxes from two numbers
 function generateBoxes(a,b){
     let diff = (a<b)? (a+10)-b : a-b;
     let step2 = 100 - diff;
     let base = step2 + b;
     let boxes = [];
-    for(let i=0;i<4;i++){
-        boxes.push(last2(base + 19*i));
-    }
+    for(let i=0;i<4;i++){ boxes.push(last2(base + 19*i)); }
     return boxes;
 }
 
-// Digit-wise mapping: 0↔5,1↔6,2↔7,3↔8,4↔9
 function checkBoxMatch(box, dayNum){
     const mapping = {0:5,1:6,2:7,3:8,4:9,5:0,6:1,7:2,8:3,9:4};
     let digits = box.split("");
@@ -82,7 +56,6 @@ function checkBoxMatch(box, dayNum){
     return mappedDigits.includes(dayNum.toString());
 }
 
-// Generate full chain and track sequence
 function generateChain(){
     let days=[];
     for(let i=1;i<=10;i++){
@@ -91,23 +64,16 @@ function generateChain(){
         days.push(val);
     }
 
-    let allBoxesHTML="";
-    let sequenceHTML="";
-    let currentIndex=0;
+    let allBoxesHTML="", sequenceHTML="", currentIndex=0;
 
     for(let i=0;i<days.length-1;i++){
         let boxes = generateBoxes(days[i],days[i+1]);
-
-        // Display boxes
         allBoxesHTML+="<strong>Day"+(i+1)+"-"+(i+2)+" Boxes:</strong><br>";
         boxes.forEach(b=>{ allBoxesHTML+="<div class='box'>"+b+"</div>"; });
 
-        // Sequence tracking
         let foundIndex=-1;
         for(let j=0;j<boxes.length;j++){
-            if(boxes[j]==last2(days[i+2]) || checkBoxMatch(boxes[j], days[i+2])){
-                foundIndex=j; break;
-            }
+            if(boxes[j]==last2(days[i+2]) || checkBoxMatch(boxes[j], days[i+2])) { foundIndex=j; break; }
         }
 
         sequenceHTML+="<strong>Day"+(i+2)+" in Day"+(i+1)+"-"+(i+2)+" Boxes:</strong> ";
@@ -119,15 +85,16 @@ function generateChain(){
     document.getElementById("allBoxes").innerHTML=allBoxesHTML;
     document.getElementById("sequence").innerHTML=sequenceHTML;
 
-    // Predict Day11 using last pair (Day9-Day10)
     let lastBoxes = generateBoxes(days[8],days[9]);
     let predictedBox = lastBoxes[currentIndex>=0?currentIndex:0];
     document.getElementById("day11").innerText = predictedBox;
 }
 
-// Attach function to button
+// Attach click event after DOM load
 document.getElementById("generateBtn").addEventListener("click", generateChain);
 
+}); // end DOMContentLoaded
 </script>
+
 </body>
 </html>
