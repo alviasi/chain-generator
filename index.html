@@ -56,11 +56,28 @@ display:block;
 <input id="d10" placeholder="Day10">
 
 <button onclick="generate()">Generate Boxes</button>
-
+<button onclick="shiftNumbers()">Shift Numbers</button>
+<button onclick="generate()">Generate Boxes</button>
+  
 <h3>Boxes</h3>
 
 <div id="result"></div>
+function shiftNumbers(){
 
+document.getElementById("d1").value=document.getElementById("d2").value;
+document.getElementById("d2").value=document.getElementById("d3").value;
+document.getElementById("d3").value=document.getElementById("d4").value;
+document.getElementById("d4").value=document.getElementById("d5").value;
+document.getElementById("d5").value=document.getElementById("d6").value;
+document.getElementById("d6").value=document.getElementById("d7").value;
+document.getElementById("d7").value=document.getElementById("d8").value;
+document.getElementById("d8").value=document.getElementById("d9").value;
+document.getElementById("d9").value=document.getElementById("d10").value;
+
+document.getElementById("d10").value="";
+
+}
+  
 <script>
 
 function last2(n){
