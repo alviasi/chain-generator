@@ -15,32 +15,42 @@
 <input id="d9" placeholder="Day9"><br>
 <input id="d10" placeholder="Day10"><br><br>
 
-<button onclick="shiftNumbers()">Push Up</button>
+<button onclick="pushUp()">Push Up</button>
 <button onclick="generate()">Generate</button>
 
-<p id="result"></p>
+<h3 id="result"></h3>
 
 <script>
 
-function shiftNumbers(){
-document.getElementById("d1").value = document.getElementById("d2").value
-document.getElementById("d2").value = document.getElementById("d3").value
-document.getElementById("d3").value = document.getElementById("d4").value
-document.getElementById("d4").value = document.getElementById("d5").value
-document.getElementById("d5").value = document.getElementById("d6").value
-document.getElementById("d6").value = document.getElementById("d7").value
-document.getElementById("d7").value = document.getElementById("d8").value
-document.getElementById("d8").value = document.getElementById("d9").value
-document.getElementById("d9").value = document.getElementById("d10").value
-document.getElementById("d10").value = ""
+function pushUp(){
+d1.value=d2.value
+d2.value=d3.value
+d3.value=d4.value
+d4.value=d5.value
+d5.value=d6.value
+d6.value=d7.value
+d7.value=d8.value
+d8.value=d9.value
+d9.value=d10.value
+d10.value=""
 }
 
 function generate(){
-let n1 = document.getElementById("d1").value
-let n2 = document.getElementById("d2").value
+let a=d1.value
+let b=d2.value
 
-document.getElementById("result").innerHTML =
-"Day1: "+n1+" Day2: "+n2
+let diff=a-b
+if(a<b){ diff=(a+10)-b }
+
+let step2=100-diff
+let step3=step2+Number(b)
+
+let box1=step3
+let box2=step3+19
+let box3=step3+38
+let box4=step3+57
+
+result.innerHTML="Boxes: "+box1+" , "+box2+" , "+box3+" , "+box4
 }
 
 </script>
