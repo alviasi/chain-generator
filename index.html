@@ -1,17 +1,12 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
-<title>Chain Generator</title>
-
+<title>Full Automatic Chain Generator</title>
 <style>
-
 body{
 font-family:Arial;
 text-align:center;
 }
-
 input{
 width:70px;
 padding:8px;
@@ -20,30 +15,31 @@ display:block;
 text-align:center;
 font-size:16px;
 }
-
 button{
 padding:10px 20px;
 font-size:16px;
-margin-top:10px;
-margin-bottom:10px;
+margin:10px;
 }
-
 .box{
 border:2px solid black;
 width:70px;
 padding:12px;
 margin:8px auto;
-font-size:20px;
+font-size:18px;
 display:block;
 }
-
+.sequenceBox{
+border:1px solid #444;
+padding:5px;
+margin:4px auto;
+width:80px;
+display:block;
+}
 </style>
-
 </head>
-
 <body>
 
-<h2>10 Day Chain Generator</h2>
+<h2>10-Day Full Chain Generator</h2>
 
 <input id="d1" placeholder="Day1">
 <input id="d2" placeholder="Day2">
@@ -56,13 +52,16 @@ display:block;
 <input id="d9" placeholder="Day9">
 <input id="d10" placeholder="Day10">
 
-<button onclick="shiftNumbers()">Shift Numbers</button>
+<button onclick="generateChain()">Generate Full Chain</button>
 
-<button onclick="generate()">Generate Boxes</button>
+<h3>Boxes for each pair</h3>
+<div id="allBoxes"></div>
 
-<h3>Boxes</h3>
+<h3>Sequence Tracking</h3>
+<div id="sequence"></div>
 
-<div id="result"></div>
+<h3>Predicted Day11 Box</h3>
+<div id="day11" class="box"></div>
 
 <script>
 
@@ -70,55 +69,74 @@ function last2(n){
 return ("0"+n).slice(-2);
 }
 
-function generate(){
-
-let a=parseInt(document.getElementById("d1").value);
-let b=parseInt(document.getElementById("d2").value);
-
+// Function to generate 4 boxes from two numbers
+function generateBoxes(a,b){
 let diff;
-
 if(a<b){
 diff=(a+10)-b;
 }else{
 diff=a-b;
 }
-
 let step2=100-diff;
-
 let base=step2+b;
 
-let box1=last2(base+19);
-let box2=last2((base+19)+19);
-let box3=last2((base+38)+19);
-let box4=last2((base+57)+19);
+let boxes=[];
+for(let i=0;i<4;i++){
+boxes.push(last2(base + 19*i));
+}
+return boxes;
+}
 
-document.getElementById("result").innerHTML=
+// Function to generate full chain
+function generateChain(){
+let days=[];
+for(let i=1;i<=10;i++){
+days.push(parseInt(document.getElementById("d"+i).value));
+}
 
-"<div class='box'>"+box1+"</div>"+
-"<div class='box'>"+box2+"</div>"+
-"<div class='box'>"+box3+"</div>"+
-"<div class='box'>"+box4+"</div>";
+let allBoxesHTML="";
+let sequenceHTML="";
+let currentBoxes=[];
+let currentIndex=0;
+
+// Generate boxes and track sequence
+for(let i=0;i<days.length-1;i++){
+let boxes = generateBoxes(days[i],days[i+1]);
+allBoxesHTML+="<strong>Day"+(i+1)+"-"+(i+2)+" Boxes:</strong><br>";
+boxes.forEach(b=>{
+allBoxesHTML+="<div class='box'>"+b+"</div>";
+});
+
+// Sequence tracking
+if(i==0){
+currentBoxes = boxes;
+currentIndex=-1;
+}
+
+// Find Day(i+2) in boxes
+let foundIndex = boxes.indexOf(last2(days[i+2]));
+sequenceHTML+="<strong>Day"+(i+2)+" in Day"+(i+1)+"-"+(i+2)+" Boxes:</strong> ";
+if(foundIndex>=0){
+sequenceHTML+="Box"+(foundIndex+1);
+currentIndex = foundIndex;
+}else{
+sequenceHTML+="Not Found";
+}
+sequenceHTML+="<br>";
 
 }
 
-function shiftNumbers(){
+document.getElementById("allBoxes").innerHTML=allBoxesHTML;
+document.getElementById("sequence").innerHTML=sequenceHTML;
 
-document.getElementById("d1").value=document.getElementById("d2").value;
-document.getElementById("d2").value=document.getElementById("d3").value;
-document.getElementById("d3").value=document.getElementById("d4").value;
-document.getElementById("d4").value=document.getElementById("d5").value;
-document.getElementById("d5").value=document.getElementById("d6").value;
-document.getElementById("d6").value=document.getElementById("d7").value;
-document.getElementById("d7").value=document.getElementById("d8").value;
-document.getElementById("d8").value=document.getElementById("d9").value;
-document.getElementById("d9").value=document.getElementById("d10").value;
-
-document.getElementById("d10").value="";
+// Predict Day11 Box using last pair (Day9-Day10)
+let lastBoxes = generateBoxes(days[8],days[9]);
+let predictedBox = lastBoxes[currentIndex>=0?currentIndex:0];
+document.getElementById("day11").innerText = predictedBox;
 
 }
 
 </script>
 
 </body>
-
 </html>
