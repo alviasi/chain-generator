@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chain Generator</title>
+<style>
+body{font-family:Arial;text-align:center}
+input{width:50px;margin:5px}
+.box{border:1px solid black;padding:10px;margin:5px;display:inline-block;width:50px}
+</style>
+</head>
+
+<body>
+
+<h2>10 Day Chain Generator</h2>
+
+<div>
+<input id="d1">
+<input id="d2">
+<input id="d3">
+<input id="d4">
+<input id="d5">
+<input id="d6">
+<input id="d7">
+<input id="d8">
+<input id="d9">
+<input id="d10">
+</div>
+
+<button onclick="generate()">Generate</button>
+
+<h3>Boxes</h3>
+<div id="result"></div>
+
+<script>
+
+function last2(n){
+return ("0"+n).slice(-2);
+}
+
+function generate(){
+
+let d1=parseInt(document.getElementById("d1").value);
+let d2=parseInt(document.getElementById("d2").value);
+
+let a=d1;
+let b=d2;
+
+let diff;
+
+if(a<b){
+diff=(a+10)-b;
+}else{
+diff=a-b;
+}
+
+let step2=100-diff;
+
+let base=step2+b;
+
+let box1=last2(base+19);
+let box2=last2(box1*1+19);
+let box3=last2(box2*1+19);
+let box4=last2(box3*1+19);
+
+document.getElementById("result").innerHTML=
+
+"<div class='box'>"+box1+"</div>"+
+"<div class='box'>"+box2+"</div>"+
+"<div class='box'>"+box3+"</div>"+
+"<div class='box'>"+box4+"</div>";
+
+}
+
+</script>
+
+</body>
+</html>
