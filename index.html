@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html>
+<head>
+<title>Chain Generator</title>
+</head>
+
 <body>
 
 <h2>10 Day Entry</h2>
@@ -23,34 +27,49 @@
 <script>
 
 function pushUp(){
-d1.value=d2.value
-d2.value=d3.value
-d3.value=d4.value
-d4.value=d5.value
-d5.value=d6.value
-d6.value=d7.value
-d7.value=d8.value
-d8.value=d9.value
-d9.value=d10.value
-d10.value=""
+
+document.getElementById("d1").value=document.getElementById("d2").value
+document.getElementById("d2").value=document.getElementById("d3").value
+document.getElementById("d3").value=document.getElementById("d4").value
+document.getElementById("d4").value=document.getElementById("d5").value
+document.getElementById("d5").value=document.getElementById("d6").value
+document.getElementById("d6").value=document.getElementById("d7").value
+document.getElementById("d7").value=document.getElementById("d8").value
+document.getElementById("d8").value=document.getElementById("d9").value
+document.getElementById("d9").value=document.getElementById("d10").value
+document.getElementById("d10").value=""
+
 }
 
 function generate(){
-let a=d1.value
-let b=d2.value
 
-let diff=a-b
-if(a<b){ diff=(a+10)-b }
+let a=parseInt(document.getElementById("d1").value)
+let b=parseInt(document.getElementById("d2").value)
+
+if(isNaN(a)||isNaN(b)){
+document.getElementById("result").innerHTML="Enter numbers first"
+return
+}
+
+let diff
+
+if(a<b){
+diff=(a+10)-b
+}else{
+diff=a-b
+}
 
 let step2=100-diff
-let step3=step2+Number(b)
+let step3=step2+b
 
 let box1=step3
 let box2=step3+19
 let box3=step3+38
 let box4=step3+57
 
-result.innerHTML="Boxes: "+box1+" , "+box2+" , "+box3+" , "+box4
+document.getElementById("result").innerHTML=
+"Boxes: "+box1+" , "+box2+" , "+box3+" , "+box4
+
 }
 
 </script>
