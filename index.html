@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Full Automatic Chain Generator with Mapping</title>
+<title>Full Automatic Chain Generator with Digit-wise Mapping</title>
 <style>
 body{
 font-family:Arial;
@@ -28,18 +28,11 @@ margin:8px auto;
 font-size:18px;
 display:block;
 }
-.sequenceBox{
-border:1px solid #444;
-padding:5px;
-margin:4px auto;
-width:80px;
-display:block;
-}
 </style>
 </head>
 <body>
 
-<h2>10-Day Full Chain Generator (Mapping Included)</h2>
+<h2>10-Day Full Chain Generator (Digit-wise Mapping)</h2>
 
 <input id="d1" placeholder="Day1">
 <input id="d2" placeholder="Day2">
@@ -66,82 +59,85 @@ display:block;
 <script>
 
 function last2(n){
-return ("0"+n).slice(-2);
+    return ("0"+n).slice(-2);
 }
 
-// Mapping formula
-function mapNumber(n){
+// Digit-wise mapping formula
+function mapBoxDigits(box){
     const mapping = {0:5,1:6,2:7,3:8,4:9,5:0,6:1,7:2,8:3,9:4};
-    return mapping[n]!==undefined ? mapping[n] : n;
+    let digits = box.split("");
+    let mappedDigits = digits.map(d=>mapping[d]?mapping[d]:d);
+    return mappedDigits.join("");
 }
 
 // Generate 4 boxes from two numbers
 function generateBoxes(a,b){
-let diff;
-if(a<b){
-diff=(a+10)-b;
-}else{
-diff=a-b;
-}
-let step2=100-diff;
-let base=step2+b;
+    let diff;
+    if(a<b){
+        diff=(a+10)-b;
+    }else{
+        diff=a-b;
+    }
+    let step2=100-diff;
+    let base=step2+b;
 
-let boxes=[];
-for(let i=0;i<4;i++){
-boxes.push(last2(base + 19*i));
-}
-return boxes;
+    let boxes=[];
+    for(let i=0;i<4;i++){
+        boxes.push(last2(base + 19*i));
+    }
+    return boxes;
 }
 
-// Generate full chain with mapping check
+// Generate full chain with digit-wise mapping
 function generateChain(){
-let days=[];
-for(let i=1;i<=10;i++){
-days.push(parseInt(document.getElementById("d"+i).value));
-}
+    let days=[];
+    for(let i=1;i<=10;i++){
+        days.push(parseInt(document.getElementById("d"+i).value));
+    }
 
-let allBoxesHTML="";
-let sequenceHTML="";
-let currentIndex=0;
+    let allBoxesHTML="";
+    let sequenceHTML="";
+    let currentIndex=0;
 
-// Generate boxes and track sequence
-for(let i=0;i<days.length-1;i++){
-let boxes = generateBoxes(days[i],days[i+1]);
+    for(let i=0;i<days.length-1;i++){
+        let boxes = generateBoxes(days[i],days[i+1]);
 
-// Show boxes
-allBoxesHTML+="<strong>Day"+(i+1)+"-"+(i+2)+" Boxes:</strong><br>";
-boxes.forEach(b=>{
-allBoxesHTML+="<div class='box'>"+b+"</div>";
-});
+        // Display boxes
+        allBoxesHTML+="<strong>Day"+(i+1)+"-"+(i+2)+" Boxes:</strong><br>";
+        boxes.forEach(b=>{
+            allBoxesHTML+="<div class='box'>"+b+"</div>";
+        });
 
-// Sequence tracking
-let checkNum = last2(days[i+2]);
-let foundIndex = boxes.indexOf(checkNum);
+        // Sequence tracking
+        let foundIndex = -1;
+        for(let j=0;j<boxes.length;j++){
+            if(last2(boxes[j])==last2(days[i+2])){
+                foundIndex=j;
+                break;
+            }
+            else if(last2(mapBoxDigits(boxes[j]))==last2(days[i+2])){
+                foundIndex=j;
+                break;
+            }
+        }
 
-// If not found, try mapping
-if(foundIndex<0){
-    let mapped = mapNumber(days[i+2]);
-    foundIndex = boxes.indexOf(last2(mapped));
-}
+        sequenceHTML+="<strong>Day"+(i+2)+" in Day"+(i+1)+"-"+(i+2)+" Boxes:</strong> ";
+        if(foundIndex>=0){
+            sequenceHTML+="Box"+(foundIndex+1);
+            currentIndex=foundIndex;
+        }else{
+            sequenceHTML+="Not Found";
+        }
+        sequenceHTML+="<br>";
+    }
 
-sequenceHTML+="<strong>Day"+(i+2)+" in Day"+(i+1)+"-"+(i+2)+" Boxes:</strong> ";
-if(foundIndex>=0){
-    sequenceHTML+="Box"+(foundIndex+1);
-    currentIndex = foundIndex;
-}else{
-    sequenceHTML+="Not Found";
-}
-sequenceHTML+="<br>";
-}
+    document.getElementById("allBoxes").innerHTML=allBoxesHTML;
+    document.getElementById("sequence").innerHTML=sequenceHTML;
 
-document.getElementById("allBoxes").innerHTML=allBoxesHTML;
-document.getElementById("sequence").innerHTML=sequenceHTML;
-
-// Predict Day11 using last pair (Day9-Day10)
-let lastBoxes = generateBoxes(days[8],days[9]);
-let predictedBox = lastBoxes[currentIndex>=0?currentIndex:0];
-document.getElementById("day11").innerText = predictedBox;
-
+    // Predict Day11 using last pair (Day9-Day10)
+    let lastBoxes = generateBoxes(days[8],days[9]);
+    let predictedBox = lastBoxes[currentIndex>=0?currentIndex:0];
+    document.getElementById("day11").innerText = predictedBox;
 }
 
 </script>
