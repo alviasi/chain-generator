@@ -1,77 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Chain Generator</title>
-</head>
-
 <body>
 
-<h2>10 Day Entry</h2>
+<h2>Test Button</h2>
 
-<input id="d1" placeholder="Day1"><br>
-<input id="d2" placeholder="Day2"><br>
-<input id="d3" placeholder="Day3"><br>
-<input id="d4" placeholder="Day4"><br>
-<input id="d5" placeholder="Day5"><br>
-<input id="d6" placeholder="Day6"><br>
-<input id="d7" placeholder="Day7"><br>
-<input id="d8" placeholder="Day8"><br>
-<input id="d9" placeholder="Day9"><br>
-<input id="d10" placeholder="Day10"><br><br>
+<input id="n1" placeholder="Number">
+<button onclick="test()">Generate</button>
 
-<button onclick="pushUp()">Push Up</button>
-<button onclick="generate()">Generate</button>
-
-<h3 id="result"></h3>
+<p id="result"></p>
 
 <script>
-
-function pushUp(){
-
-document.getElementById("d1").value=document.getElementById("d2").value
-document.getElementById("d2").value=document.getElementById("d3").value
-document.getElementById("d3").value=document.getElementById("d4").value
-document.getElementById("d4").value=document.getElementById("d5").value
-document.getElementById("d5").value=document.getElementById("d6").value
-document.getElementById("d6").value=document.getElementById("d7").value
-document.getElementById("d7").value=document.getElementById("d8").value
-document.getElementById("d8").value=document.getElementById("d9").value
-document.getElementById("d9").value=document.getElementById("d10").value
-document.getElementById("d10").value=""
-
+function test(){
+let x = document.getElementById("n1").value;
+document.getElementById("result").innerHTML = "Number: " + x;
 }
-
-function generate(){
-
-let a=parseInt(document.getElementById("d1").value)
-let b=parseInt(document.getElementById("d2").value)
-
-if(isNaN(a)||isNaN(b)){
-document.getElementById("result").innerHTML="Enter numbers first"
-return
-}
-
-let diff
-
-if(a<b){
-diff=(a+10)-b
-}else{
-diff=a-b
-}
-
-let step2=100-diff
-let step3=step2+b
-
-let box1=step3
-let box2=step3+19
-let box3=step3+38
-let box4=step3+57
-
-document.getElementById("result").innerHTML=
-"Boxes: "+box1+" , "+box2+" , "+box3+" , "+box4
-
-}
-
 </script>
 
 </body>
