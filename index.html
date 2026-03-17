@@ -124,7 +124,7 @@ function generateChain(){
             if(checkBoxMatch(boxes[j], days[i+2])){ foundIndex = j; break; }
         }
 
-        sequenceHTML += `<strong>Day${i+2} in Day${i+1}-${i+2} Boxes:</strong> `;
+        sequenceHTML += `<strong>Day${i+3} in Day${i+1}-${i+2} Boxes:</strong> `;
         if(foundIndex>=0){ sequenceHTML += `Box${foundIndex+1}`; currentIndex=foundIndex; }
         else{ sequenceHTML += 'Not Found'; }
         sequenceHTML += '<br>';
