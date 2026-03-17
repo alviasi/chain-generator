@@ -71,11 +71,33 @@ function generateBoxes(a,b){
     }
     return boxes;
 }
-
 function checkBoxMatch(box, dayNum){
-    const dayStr = String(dayNum);
-    return box.includes(dayStr) || mapBox(box).includes(dayStr);
+
+    const mapping = {'0':'5','1':'6','2':'7','3':'8','4':'9','5':'0','6':'1','7':'2','8':'3','9':'4'};
+
+    let d = String(dayNum);
+
+    let d1 = d[0];                 // first digit
+    let d2 = d.length>1 ? d[1] : null;   // second digit
+
+    let boxDigits = box.split('');
+
+    for(let digit of boxDigits){
+
+        // direct match
+        if(digit === d1 || digit === d2){
+            return true;
+        }
+
+        // mapping match
+        if(mapping[digit] === d1 || mapping[digit] === d2){
+            return true;
+        }
+    }
+
+    return false;
 }
+
 
 function generateChain(){
     let days = [];
