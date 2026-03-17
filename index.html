@@ -71,7 +71,22 @@ function generateChain(){
         if(isNaN(num)) { alert('Please enter valid numbers'); return; }
         days.push(num);
     }
+function shiftNumbers(){
 
+document.getElementById("d1").value=document.getElementById("d2").value;
+document.getElementById("d2").value=document.getElementById("d3").value;
+document.getElementById("d3").value=document.getElementById("d4").value;
+document.getElementById("d4").value=document.getElementById("d5").value;
+document.getElementById("d5").value=document.getElementById("d6").value;
+document.getElementById("d6").value=document.getElementById("d7").value;
+document.getElementById("d7").value=document.getElementById("d8").value;
+document.getElementById("d8").value=document.getElementById("d9").value;
+document.getElementById("d9").value=document.getElementById("d10").value;
+
+document.getElementById("d10").value="";
+
+}
+  
     let allBoxesHTML = '';
     let sequenceHTML = '';
     let currentIndex = 0;
