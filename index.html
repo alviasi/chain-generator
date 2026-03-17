@@ -1,13 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>10-Day Chain Generator</title>
+<title>Full Automatic Chain Generator</title>
 <style>
-body { font-family: Arial; text-align: center; padding: 10px; }
-input { width: 70px; padding: 8px; margin: 6px auto; display: block; text-align: center; font-size: 16px; }
-button { padding: 10px 20px; font-size: 16px; margin: 10px; cursor: pointer; }
-.box { border: 2px solid black; width: 70px; padding: 12px; margin: 8px auto; font-size: 18px; display: block; }
+body{
+font-family:Arial;
+text-align:center;
+}
+input{
+width:70px;
+padding:8px;
+margin:6px auto;
+display:block;
+text-align:center;
+font-size:16px;
+}
+button{
+padding:10px 20px;
+font-size:16px;
+margin:10px;
+}
+.box{
+border:2px solid black;
+width:70px;
+padding:12px;
+margin:8px auto;
+font-size:18px;
+display:block;
+}
+.sequenceBox{
+border:1px solid #444;
+padding:5px;
+margin:4px auto;
+width:80px;
+display:block;
+}
 </style>
 </head>
 <body>
@@ -25,7 +52,7 @@ button { padding: 10px 20px; font-size: 16px; margin: 10px; cursor: pointer; }
 <input id="d9" placeholder="Day9">
 <input id="d10" placeholder="Day10">
 
-<button id="generateBtn">Generate Full Chain</button>
+<button onclick="generateChain()">Generate Full Chain</button>
 
 <h3>Boxes for each pair</h3>
 <div id="allBoxes"></div>
@@ -37,71 +64,79 @@ button { padding: 10px 20px; font-size: 16px; margin: 10px; cursor: pointer; }
 <div id="day11" class="box"></div>
 
 <script>
-(function(){
 
-// Digit-wise mapping: 0↔5,1↔6,2↔7,3↔8,4↔9
-const mapping = {'0':'5','1':'6','2':'7','3':'8','4':'9','5':'0','6':'1','7':'2','8':'3','9':'4'};
-
-function mapBox(box){
-    return box.split('').map(d=>mapping[d]).join('');
+function last2(n){
+return ("0"+n).slice(-2);
 }
 
+// Function to generate 4 boxes from two numbers
 function generateBoxes(a,b){
-    let diff = (a<b)? (a+10)-b : a-b;
-    let base = 100 - diff + b;
-    let boxes = [];
-    for(let i=0;i<4;i++){
-        boxes.push(String(base + 19*i).slice(-2));
-    }
-    return boxes;
+let diff;
+if(a<b){
+diff=(a+10)-b;
+}else{
+diff=a-b;
+}
+let step2=100-diff;
+let base=step2+b;
+
+let boxes=[];
+for(let i=0;i<4;i++){
+boxes.push(last2(base + 19*i));
+}
+return boxes;
 }
 
-function checkBoxMatch(box, dayNum){
-    const dayStr = String(dayNum);
-    return box.includes(dayStr) || mapBox(box).includes(dayStr);
-}
-
+// Function to generate full chain
 function generateChain(){
-    let days = [];
-    for(let i=1;i<=10;i++){
-        let val = document.getElementById('d'+i).value.trim();
-        if(val === '') { alert('Please enter all 10 numbers'); return; }
-        let num = parseInt(val);
-        if(isNaN(num)) { alert('Please enter valid numbers'); return; }
-        days.push(num);
-    }
-
-    let allBoxesHTML = '';
-    let sequenceHTML = '';
-    let currentIndex = 0;
-
-    for(let i=0;i<days.length-1;i++){
-        let boxes = generateBoxes(days[i], days[i+1]);
-        allBoxesHTML += `<strong>Day${i+1}-${i+2} Boxes:</strong><br>`;
-        boxes.forEach(b=>{ allBoxesHTML += `<div class="box">${b}</div>`; });
-
-        let foundIndex = -1;
-        for(let j=0;j<boxes.length;j++){
-            if(checkBoxMatch(boxes[j], days[i+2])){ foundIndex = j; break; }
-        }
-
-        sequenceHTML += `<strong>Day${i+2} in Day${i+1}-${i+2} Boxes:</strong> `;
-        if(foundIndex>=0){ sequenceHTML += `Box${foundIndex+1}`; currentIndex=foundIndex; }
-        else{ sequenceHTML += 'Not Found'; }
-        sequenceHTML += '<br>';
-    }
-
-    document.getElementById('allBoxes').innerHTML = allBoxesHTML;
-    document.getElementById('sequence').innerHTML = sequenceHTML;
-
-    let lastBoxes = generateBoxes(days[8], days[9]);
-    let predictedBox = lastBoxes[currentIndex>=0?currentIndex:0];
-    document.getElementById('day11').innerText = predictedBox;
+let days=[];
+for(let i=1;i<=10;i++){
+days.push(parseInt(document.getElementById("d"+i).value));
 }
 
-document.getElementById('generateBtn').addEventListener('click', generateChain);
+let allBoxesHTML="";
+let sequenceHTML="";
+let currentBoxes=[];
+let currentIndex=0;
 
-})();
+// Generate boxes and track sequence
+for(let i=0;i<days.length-1;i++){
+let boxes = generateBoxes(days[i],days[i+1]);
+allBoxesHTML+="<strong>Day"+(i+1)+"-"+(i+2)+" Boxes:</strong><br>";
+boxes.forEach(b=>{
+allBoxesHTML+="<div class='box'>"+b+"</div>";
+});
+
+// Sequence tracking
+if(i==0){
+currentBoxes = boxes;
+currentIndex=-1;
+}
+
+// Find Day(i+2) in boxes
+let foundIndex = boxes.indexOf(last2(days[i+2]));
+sequenceHTML+="<strong>Day"+(i+2)+" in Day"+(i+1)+"-"+(i+2)+" Boxes:</strong> ";
+if(foundIndex>=0){
+sequenceHTML+="Box"+(foundIndex+1);
+currentIndex = foundIndex;
+}else{
+sequenceHTML+="Not Found";
+}
+sequenceHTML+="<br>";
+
+}
+
+document.getElementById("allBoxes").innerHTML=allBoxesHTML;
+document.getElementById("sequence").innerHTML=sequenceHTML;
+
+// Predict Day11 Box using last pair (Day9-Day10)
+let lastBoxes = generateBoxes(days[8],days[9]);
+let predictedBox = lastBoxes[currentIndex>=0?currentIndex:0];
+document.getElementById("day11").innerText = predictedBox;
+
+}
+
 </script>
+
 </body>
 </html>
